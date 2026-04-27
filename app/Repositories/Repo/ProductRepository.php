@@ -17,7 +17,7 @@ class ProductRepository implements IProductRepository{
             $products = Product::with(['category','vendor'])->where('is_published' , 1)->get();
         return $products;
     }
-    public function GetById($product_id , $user_id)
+    public function GetById($product_id , $user_id = null)
     {
         if($user_id == 2)
             $product = Product::with(['category','vendor'])->where('vendor_id' , $user_id)->find($product_id);

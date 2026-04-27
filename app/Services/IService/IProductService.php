@@ -6,10 +6,10 @@ use App\Http\Requests\Product\UpdateProductRequest;
 use Illuminate\Http\Request;
 
 interface IProductService{
-    public function GetAllProducts(Request $request);
+    public function GetAllProducts($user_id = null);
     public function GetLatestProducts();
     public function GetAllProductsByCatId($cat_id);
-    public function GetProductById(Request $request ,int $id);
+    public function GetProductById($id , $user_id = null);
     public function CreateProduct(StoreProductRequest $request);
     public function UpdateProduct(UpdateProductRequest $request , $id);
     public function DeleteProduct(Request $request ,$id);

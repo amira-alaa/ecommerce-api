@@ -39,21 +39,23 @@ class CartService implements ICartService{
 
         $newitem = $req->toArray();
         $item = $this->_cartRepo->GetItem($req->user_id , $req->product_id);
-        // return $item;
+        // 1    , 5      5-1 = 4         5    , 2      2-5=-3
         if($item != null){
             $product_inStock = $item->product->quantity_in_stock;
-            if($item->quantity >= $product_inStock)
+            $added_quantity = $req->quantity - $item->quantity;
+
+
+            if($item->quantity >= $product_inStock && $added_quantity > 0)
                 return null;
-            $item->increment('quantity' , $req->quantity );
+            $item->quantity += $added_quantity;
+            $item->save();
+
             $retitem = new GetCartResource($item) ;
             return $retitem->resolve();
-            // return $item;
         }
         else{
 
             try{
-                // $retitem = new GetCartResource() ;
-                // return $retitem->resolve();
                 return $this->_cartRepo->AddItem($newitem);
             }catch(\Exception $ex){
                 return $ex;

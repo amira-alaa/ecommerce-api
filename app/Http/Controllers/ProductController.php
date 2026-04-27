@@ -23,7 +23,11 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         // get all products for user & vendor
-        $products = $this->_productService->GetAllProducts($request);
+        dd($request->user()->id);
+        if(isset($request->user()->id))
+            $products = $this->_productService->GetAllProducts($request->user()->id);
+        else
+            $products = $this->_productService->GetAllProducts();
         if(!$products)
             return response()->json([
                                 'message' => 'No Available Products',
@@ -65,8 +69,13 @@ class ProductController extends Controller
      */
     public function show(Request $request , $id)
     {
-        // get specific product for vendor
-        $product= $this->_productService->GetProductById($request ,$id);
+        // get specific product
+        if(isset($request->user()->id))
+            $product= $this->_productService->GetProductById($id, $request->user()->id);
+        else
+            $product= $this->_productService->GetProductById($id);
+
+
         if(!$product)
             return response()->json([
                                 'message' => 'Product is Not Found',

@@ -24,10 +24,12 @@ class CategoryController extends Controller
     public function index(Request $req)
     {
         // get all Categories
-        // return $req;
+        // // dd($req->user()->attributesToArray()['id']);
+        // return $req->user()->attributesToArray()['id'];
         if(isset($req->user()->id))
             $categories = $this->_categoryService->GetAllCategories($req->user()->id);
-        $categories = $this->_categoryService->GetAllCategories();
+        else
+            $categories = $this->_categoryService->GetAllCategories();
         if(!$categories)
             return response()->json([
                                 'message' => 'No Available Categories',
@@ -59,6 +61,7 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         // insert A new Category
+        return $request->user();
         $res = $this->_categoryService->CreateCategory($request);
         if($res)
             return response()->json([

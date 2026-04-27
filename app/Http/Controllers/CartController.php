@@ -38,7 +38,7 @@ class CartController extends Controller
     public function store(AddItemRequest $request)
     {
         // add item to cart
-        // return $request;
+        // return $request->user();
         $cart = $this->_cartService->AddItemToCart($request);
         // return $cart;
         if($cart != null)

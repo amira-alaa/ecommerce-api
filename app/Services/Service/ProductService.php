@@ -16,9 +16,10 @@ class ProductService implements IProductService{
     {
         $this->_productRepo = $productRepo;
     }
-    public function GetAllProducts(Request $request){
+    public function GetAllProducts($user_id = null){
 
-        $products = $this->_productRepo->GetAll($request->user()->id);
+        $products = $this->_productRepo->GetAll($user_id);
+        
         if(!$products || count($products) == 0)
             return null;
         return GetProductResource::collection($products)->resolve();
@@ -37,14 +38,15 @@ class ProductService implements IProductService{
         return GetProductResource::collection($products)->resolve() ;
     }
 
-    public function GetProductById(Request $request , int $id){
-        $product = $this->_productRepo->GetById($id , $request->user()->id);
-
+    public function GetProductById($id , $user_id = null){
+        $product = $this->_productRepo->GetById($id , $user_id);
         if(!$product)
             return null;
         $productDTO =new GetProductResource($product);
         return $productDTO->resolve();
     }
+
+
     public function CreateProduct(StoreProductRequest $request){
         $request->merge(['vendor_id' => $request->user()->id]);
         $product = $request->toArray();
